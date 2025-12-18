@@ -16,9 +16,9 @@ def load_env():
 
 @pytest.fixture(scope="session")
 def trello_api_client():
-    trello_client = TrelloAPIClient(api_key=os.getenv("DROXI_BOARD_ID"),
-                                    token = os.getenv("DROXI_API_KEY"),
-                                    board_id=os.getenv("DROXI_API_TOKEN"))
+    trello_client = TrelloAPIClient(api_key=os.getenv("DROXI_API_KEY"),
+                                    token = os.getenv("DROXI_API_TOKEN"),
+                                    board_id=os.getenv("DROXI_BOARD_ID"))
     return trello_client
 
 
