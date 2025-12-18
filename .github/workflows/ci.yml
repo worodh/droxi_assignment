@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          playwright install --with-deps chromium
+
+      - name: Run tests
+        env:
+          DROXI_BOARD_ID: ${{ secrets.DROXI_BOARD_ID }}
+          DROXI_API_KEY: ${{ secrets.DROXI_API_KEY }}
+          DROXI_API_TOKEN: ${{ secrets.DROXI_API_TOKEN }}
+          DROXI_TRELLO_EMAIL: ${{ secrets.DROXI_TRELLO_EMAIL }}
+          DROXI_TRELLO_PASSWORD: ${{ secrets.DROXI_TRELLO_PASSWORD }}
+          DROXI_BOARD_LINK: ${{ secrets.DROXI_BOARD_LINK }}
+        # Running with xvfb-run to support headless=False in CI
+        run: |
+          xvfb-run pytest test_trello_board.py --alluredir=allure-results
+
+      - name: Upload Allure Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
