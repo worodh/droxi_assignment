@@ -34,9 +34,27 @@ jobs:
           DROXI_TRELLO_EMAIL: ${{ secrets.DROXI_TRELLO_EMAIL }}
           DROXI_TRELLO_PASSWORD: ${{ secrets.DROXI_TRELLO_PASSWORD }}
           DROXI_BOARD_LINK: ${{ secrets.DROXI_BOARD_LINK }}
+          
         # Running with xvfb-run to support headless=False in CI
         run: |
           xvfb-run pytest test_trello_board.py --alluredir=allure-results
+
+      - name: Install Allure
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y npm
+          sudo npm install -g allure-commandline --save-dev
+
+      - name: Generate Allure Report
+        if: always()
+        run: allure generate allure-results --clean -o allure-report
+
+      - name: Upload Allure Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report
 
       - name: Upload Allure Results
         if: always()
