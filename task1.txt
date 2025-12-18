@@ -1,0 +1,15 @@
+manual testing:
+test cases
+-data verification
+-- email subject matches trello card title
+-- email body matches trello card description
+
+- new email appears in inbox -> new trello card with label 'new' appears on board
+- email with 'urgent' in subject -> trello card with label 'urgent' appears on board
+- email marked as 'done' in trello -> email moved to trash folder
+
+-edge cases
+- email with no subject -> trello card with label 'no subject' appears on board?
+- more than one email with same subject:
+--different email bodies -> separate trello cards created
+--same email bodies -> single trello card created and bodies are concatenated
