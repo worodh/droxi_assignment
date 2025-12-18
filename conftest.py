@@ -1,17 +1,14 @@
-import functools
-import json
-
-import pytest
 import os
+import time
+import json
+import pytest
+
+from dotenv import load_dotenv
 from playwright.sync_api import sync_playwright
+from playwright.sync_api import TimeoutError
 
 from clients.gmail_client import Gmail
 from clients.trello_client import TrelloAPIClient, TrelloUIClient
-from playwright.sync_api import TimeoutError
-import time
-
-
-from dotenv import load_dotenv
 
 @pytest.fixture(scope="session", autouse=True)
 def load_env():
@@ -19,15 +16,9 @@ def load_env():
 
 @pytest.fixture(scope="session")
 def trello_api_client():
-    # get env vars
-    droxi_board_id = os.getenv("DROXI_BOARD_ID")
-    droxi_api_key = os.getenv("DROXI_API_KEY")
-    droxi_api_token = os.getenv("DROXI_API_TOKEN")
-
-    # initialize trello client
-    trello_client = TrelloAPIClient(api_key=droxi_api_key,
-                                    token = droxi_api_token,
-                                    board_id=droxi_board_id)
+    trello_client = TrelloAPIClient(api_key=os.getenv("DROXI_BOARD_ID"),
+                                    token = os.getenv("DROXI_API_KEY"),
+                                    board_id=os.getenv("DROXI_API_TOKEN"))
     return trello_client
 
 
