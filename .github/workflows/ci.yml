@@ -53,7 +53,7 @@ jobs:
           
         # Running with xvfb-run to support headless=False in CI
         run: |
-          pytest --alluredir=allure-results
+          xvfb-run pytest --alluredir=allure-results
 
       - name: Generate Allure Report
         if: always()
