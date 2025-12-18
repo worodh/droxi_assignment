@@ -11,3 +11,5 @@ def test_urgent_cards_api(trello_api_client, gmail_client):
         if matching_messages:
             merged_bodies = "\n".join([msg.body for msg in matching_messages])
             check.equal(card['desc'], merged_bodies, f"Card description does not match merged_bodies email bodies for card '{card['name']}'")
+        gmail_urgent_messages = list(set(gmail_urgent_messages) - set(matching_messages))
+    check.equal(gmail_urgent_messages, [], f"These urgent mails don't have a matching trello card:{gmail_urgent_messages}")
